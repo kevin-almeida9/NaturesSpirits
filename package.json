@@ -1,0 +1,29 @@
+{
+  "name": "NaturesSpirits",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "dependencies": {
+    "live-server": "^1.2.1",
+    "phaser": "^3.24.1",
+    "ts-loader": "^8.0.6",
+    "typescript": "^4.0.3",
+    "webpack": "^5.1.3",
+    "webpack-cli": "^4.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevin-almeida9/NaturesSpirits.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevin-almeida9/NaturesSpirits/issues"
+  },
+  "homepage": "https://github.com/kevin-almeida9/NaturesSpirits#readme"
+}
