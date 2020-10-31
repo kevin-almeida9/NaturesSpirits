@@ -1,32 +1,42 @@
 import Phaser from "phaser";
-import logoImg from "./assets/logo.png";
+import playerImg from "./assets/player/player-walk.png";
 
 const config = {
   type: Phaser.AUTO,
   parent: "phaser-example",
-  width: 800,
-  height: 600,
+  width: 400,
+  height: 300,
+  physics:{
+    default: 'arcade',
+    arcade:{
+      gravity:{y:0}
+    }
+  },
   scene: {
     preload: preload,
-    create: create
+    create: create,
+    update: update
   }
 };
 
 const game = new Phaser.Game(config);
+let player
+var cursors
 
 function preload() {
-  this.load.image("logo", logoImg);
+  this.load.spritesheet("playerWalkSprite", playerImg,{frameWidth:64,frameHeight:64});
 }
 
 function create() {
-  const logo = this.add.image(400, 150, "logo");
+  // const logo = this.add.image(200, 150, "playerWalkSprite");
 
-  this.tweens.add({
-    targets: logo,
-    y: 450,
-    duration: 2000,
-    ease: "Power2",
-    yoyo: true,
-    loop: -1
-  });
+  player= this.physics.add.sprite(100,100,"playerWalkSprite")
+}
+
+function update(){
+  cursors = this.input.keyboard.createCursorsKeys()
+
+  if(cursors.left.isDown){
+    player.body.setVelocityX(-100)
+  }
 }
