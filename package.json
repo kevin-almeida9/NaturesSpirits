@@ -1,38 +1,80 @@
 {
-  "name": "phaser3-project-template",
+  "name": "natures-spirits",
   "version": "1.1.0",
-  "description": "A Phaser 3 Project Template",
-  "main": "src/index.js",
+  "description": "A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/)\r that includes hot-reloading for development and production-ready builds.",
+  "main": "main.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open"
+    "start": "electron-forge start",
+    "start-eletron": "electron ./main.js",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/photonstorm/phaser3-project-template.git"
+    "url": "git+https://github.com/kevin-almeida9/NaturesSpirits.git"
   },
-  "author": "Richard Davey <rdavey@gmail.com> (http://www.photonstorm.com)",
-  "license": "MIT",
-  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
-  "bugs": {
-    "url": "https://github.com/photonstorm/phaser3-project-template/issues"
-  },
-  "homepage": "https://github.com/photonstorm/phaser3-project-template#readme",
+  "authors": [
+    {
+      "name": "Augusto Shimizu"
+    },
+    {
+      "name": "Jamile Passaro"
+    },
+    {
+      "name": "Kevin Almeida"
+    }
+  ],
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/preset-env": "^7.7.1",
-    "babel-loader": "^8.0.6",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@electron-forge/cli": "^6.0.0-beta.54",
+    "@electron-forge/maker-deb": "^6.0.0-beta.54",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
+    "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
-    "file-loader": "^4.2.0",
+    "electron": "^10.1.5",
+    "file-loader": "^4.3.0",
     "html-webpack-plugin": "^3.2.0",
     "raw-loader": "^3.1.0",
-    "terser-webpack-plugin": "^2.2.1",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
+    "terser-webpack-plugin": "^2.3.8",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "phaser": "^3.20.1"
-  }
+    "electron-squirrel-startup": "^1.0.0",
+    "phaser": "^3.24.1"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "natures_spirits"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  },
+  "keywords": []
 }
