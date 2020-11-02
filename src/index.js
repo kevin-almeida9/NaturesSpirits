@@ -1,12 +1,17 @@
-import Phaser from "phaser";
-import playerImg from "./assets/player/player-walk.png";
+import Phaser from "phaser"
+import playerImg from "./assets/player/player-walk.png"
 import enemyImg from "./assets/enemy/enemy-walk.png"
+import magicAttack from "./assets/player/attack_magic.png"
+import mapTiles from "./assets/scenario/ground_tiles_2.png"
+import map from "./assets/scenario/map.json"
+import Enemies from './models/Enemies'
+import Player from './models/Player'
 
 const config = {
   type: Phaser.AUTO,
   parent: "phaser-example",
-  width: 400,
-  height: 300,
+  width: window.innerWidth,
+  height: window.innerHeight,
   physics:{
     default: 'arcade',
     arcade:{
@@ -20,66 +25,59 @@ const config = {
   }
 };
 
-const game = new Phaser.Game(config);
+var game = new Phaser.Game(config);
 let player;
 var cursors;
-
+var enemies;
+var enemiesGroup;
 function preload() {
-  this.load.spritesheet("playerWalkSprite", playerImg,{frameWidth:64,frameHeight:64});
+  this.load.image("mapTiles", mapTiles)
+  this.load.tilemapTiledJSON("map", map);
+  this.load.spritesheet("playerWalkSprite", playerImg,{frameWidth:64,frameHeight:64}); 
+  this.load.spritesheet("enemyWalkSprite", enemyImg,{frameWidth:64,frameHeight:64}); 
+  this.load.spritesheet("playerMagicAttack", magicAttack,{frameWidth:32,frameHeight:32}); 
 }
 
 function create() {
-  //const logo = this.add.image(200, 150, "playerWalkSprite")
+  const map = this.make.tilemap({ key: "map" })
+  const tileset = map.addTilesetImage("assets", "mapTiles")
 
-  player = this.physics.add.sprite(100,100,"playerWalkSprite")
+  const ground = map.createStaticLayer("ground", tileset, 0, 0)
 
-  const anims = this.anims;
-  
-  anims.create({
-    key: "left",
-    frames: anims.generateFrameNames("playerWalkSprite", {start:10, end:14}),
-    frameRate: 10,
-    repeat:-1
-  });
-  anims.create({
-    key: "right",
-    frames: anims.generateFrameNames("playerWalkSprite", {start:0, end:4}),
-    frameRate: 10,
-    repeat:-1
-  });
-  anims.create({
-    key: "back",
-    frames: anims.generateFrameNames("playerWalkSprite", {start:5, end:9}),
-    frameRate: 10,
-    repeat:-1
-  });
-  anims.create({
-    key: "front",
-    frames: anims.generateFrameNames("playerWalkSprite", {start:15, end:19}),
-    frameRate: 10,
-    repeat:-1
-  });
+  ground.setCollisionByProperty({ collider: true });
 
+  // Spawn point
+  const spawnPoint = map.findObject('player', objects => objects.name === 'playerSpawn')
+
+  //Player 
+  player = new Player(this, spawnPoint.x, spawnPoint.y)
+  this.physics.add.collider(player,ground)
+
+  //Enemies
+  this.enemies = map.createFromObjects('enemy','enemySpawn',{}) 
+  enemiesGroup = new Enemies(this.physics.world,this,[],this.enemies)
+  this.physics.add.collider(enemiesGroup,ground)
+
+  //Câmera
   const camera = this.cameras.main
   camera.startFollow(player)
-  // camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+  camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+
+  //Collision
+  this.physics.add.collider(player,enemiesGroup,()=>{
+    this.scene.restart()
+  })
+
+  
 }
 
 function update(){
-  player.body.setVelocity(0);
+  let input = this.input.keyboard
+  let spacebar = input.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+  cursors = this.input.keyboard.createCursorKeys()
 
-  cursors = this.input.keyboard.createCursorKeys();
+  if(player) player.move(cursors)
+ 
 
-  //Movimentação
-  if(cursors.left.isDown) player.body.setVelocityX(-100)
-  else if(cursors.right.isDown) player.body.setVelocityX(100)
-  if(cursors.up.isDown) player.body.setVelocityY(-100)
-  else if(cursors.down.isDown) player.body.setVelocityY(100)
-  
-  //Animação
-  if(cursors.left.isDown) player.anims.play("left", true)
-  else if(cursors.right.isDown) player.anims.play("right", true)
-  else if(cursors.up.isDown) player.anims.play("front", true)
-  else if(cursors.down.isDown) player.anims.play("back", true)
-  else player.anims.stop()
+  if(Phaser.Input.Keyboard.JustDown(spacebar)) player.fire(enemiesGroup)
 }
