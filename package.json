@@ -5,9 +5,9 @@
   "main": "main.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
+    "server": "webpack-dev-server --config webpack/base.js --open",
     "start": "electron-forge start",
     "start-eletron": "electron ./main.js",
-    "package": "electron-forge package",
     "make": "electron-forge make"
   },
   "repository": {

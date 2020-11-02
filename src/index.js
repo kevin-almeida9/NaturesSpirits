@@ -2,6 +2,8 @@ import Phaser from "phaser"
 import playerImg from "./assets/player/player-walk.png"
 import enemyImg from "./assets/enemy/enemy-walk.png"
 import magicAttack from "./assets/player/attack_magic.png"
+import enemyDeath from "./assets/enemy/enemy-death.png"
+import playerDeath from "./assets/player/player-death.png"
 import mapTiles from "./assets/scenario/ground_tiles_2.png"
 import map from "./assets/scenario/map.json"
 import Enemies from './models/Enemies'
@@ -35,6 +37,8 @@ function preload() {
   this.load.tilemapTiledJSON("map", map);
   this.load.spritesheet("playerWalkSprite", playerImg,{frameWidth:64,frameHeight:64}); 
   this.load.spritesheet("enemyWalkSprite", enemyImg,{frameWidth:64,frameHeight:64}); 
+  this.load.spritesheet("enemyDeathSprite", enemyDeath,{frameWidth:64,frameHeight:64});
+  this.load.spritesheet("playerDeathSprite", playerDeath,{frameWidth:64,frameHeight:64});
   this.load.spritesheet("playerMagicAttack", magicAttack,{frameWidth:32,frameHeight:32}); 
 }
 
@@ -65,7 +69,7 @@ function create() {
 
   //Collision
   this.physics.add.collider(player,enemiesGroup,()=>{
-    this.scene.restart()
+    player.morte(this.scene)
   })
 
   

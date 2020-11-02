@@ -18,7 +18,6 @@ class Projetil extends Phaser.Physics.Arcade.Sprite{
       let anims = this.scene.anims
 
       this.scene.physics.add.collider(this,enemiesGroup,(ob1,ob2)=>{
-        ob2.destroy()
         ob2.delete()
       })
       
@@ -26,7 +25,7 @@ class Projetil extends Phaser.Physics.Arcade.Sprite{
       anims.create({
         key: "defaultAttack",
         frames: anims.generateFrameNames("playerMagicAttack", {start:0, end:3}),
-        frameRate: 10,
+        frameRate: 8,
         repeat:-1
       });
 
